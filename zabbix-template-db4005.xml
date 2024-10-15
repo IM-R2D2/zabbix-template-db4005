@@ -5,7 +5,7 @@
     <groups>
         <group>
             <uuid>42fbef5fae0f4b86afd9621e7c9bba31</uuid>
-            <name>ZHARAFM</name>
+            <name>TEMPLATE</name>
         </group>
     </groups>
     <templates>
@@ -18,7 +18,7 @@
 Zabbix Template for monitoring the Deva Broadcast DB4005 FM receiver. This template enables real-time monitoring of key metrics, including RF level, audio quality, RDS parameters, and temperature. It is ideal for broadcast engineers who need reliable oversight of their broadcast system. Compatible with Zabbix 6.0+</description>
             <groups>
                 <group>
-                    <name>ZHARAFM</name>
+                    <name>TEMPLATE</name>
                 </group>
             </groups>
             <items>
@@ -210,7 +210,7 @@ Zabbix Template for monitoring the Deva Broadcast DB4005 FM receiver. This templ
                         </trigger>
                         <trigger>
                             <uuid>88979da030dc4191b5ca8dd7cfc8b893</uuid>
-                            <expression>avg(last(/DEVA DB4005/DB4005.mntrRdsPi))&lt;&gt;&quot;ZHARA FM&quot;</expression>
+                            <expression>avg(last(/DEVA DB4005/DB4005.mntrRdsPi))&lt;&gt;&quot;FM RADIO&quot;</expression>
                             <name>RDS PS [MSK]</name>
                             <priority>HIGH</priority>
                             <manual_close>YES</manual_close>
