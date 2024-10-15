@@ -9,8 +9,10 @@ This repository contains a Zabbix template for monitoring the **Deva Broadcast D
 - **Audio Metrics**: Monitors left and right audio levels, loudness, and multipath signal.
 - **RDS Metrics**: Monitors RDS PI, PS, PTY, and RT.
 - **Temperature Monitoring**: Monitors the temperature of the device's motherboard.
+- **SD Card Monitoring**: Monitors SD card usage and status.
 
 ## Requirements
+- **Firmware Version**: Compatible with Deva Broadcast DB4005 firmware version 2.6.2203 and above.
 - **Zabbix Server Version**: Tested with Zabbix 6.0 and above.
 - **Deva Broadcast DB4005**: The device should have SNMP enabled, and it must be accessible from the Zabbix server.
 - **SNMP Configuration**: Ensure that the DB4005 has SNMP community strings configured, and the Zabbix server has the necessary permissions to query it.
@@ -33,13 +35,15 @@ This repository contains a Zabbix template for monitoring the **Deva Broadcast D
 ## Template Details
 The template includes the following metrics:
 
-- **RF Level**: Monitor the strength of the incoming FM signal (`[Signal] RF Tuner`).
-- **Audio Levels**: Left and right channel audio deviation (`[LEFT] AudioSignal`, `[RIGHT] AudioSignal`).
+- **RF Level**: Monitor the strength of the incoming FM signal (`[Tuner] RF Signal`).
+- **Audio Levels**: Left and right channel audio deviation (`[Audio] Left Channel`, `[Audio] Right Channel`).
 - **MPX Power**: Composite MPX power level (`[Audio] MPX Power`).
-- **Pilot and RDS Levels**: Pilot signal level (`[Pilot] RF Tuner`), RDS PI (`[RDS] PI`), PS (`[RDS] PS`), PTY (`[RDS] PTY`), and RT (`[RDS] RT`).
-- **Multipath Signal**: Monitor multipath interference (`[MultiPath] RF Tuner`).
-- **Loudness**: Audio signal loudness (`[Loudness] Audio Signal`).
-- **Temperature**: Monitor motherboard temperature (`[Temp] MotherBoard`).
+- **Pilot and RDS Levels**: Pilot signal level (`[Tuner] Pilot`), RDS PI (`[RDS] PI`), PS (`[RDS] PS`), PTY (`[RDS] PTY`), and RT (`[RDS] RT`).
+- **Multipath Signal**: Monitor multipath interference (`[Tuner] MultiPath`).
+- **Loudness**: Audio signal loudness (`[Audio] Loudness`).
+- **Temperature**: Monitor motherboard temperature (`[Device] Temperature`).
+- **SD Card Monitoring**: Monitors SD card usage (`[Device] SD Card Free`, `[Device] SD Card Used`) and status (`[SD Card] Broken`).
+- **Device Status**: Includes fan speed (`[Device] FanSpeed`) and other alarms (e.g., `[Status] Alarm MPX`, `[Status] Alarm RF`, `[Status] Alarm Temp`).
 
 ### Triggers
 - **Frequency [MSK]**: Triggered if the frequency is outside the desired range (`last(/DEVA DB4005/DB4005.mntrFreq,#1)>=100.5`).
@@ -49,6 +53,7 @@ The template includes the following metrics:
 - **RDS PI [MSK]**: Triggered if RDS PI value is outside the desired range (`avg(last(/DEVA DB4005/DB4005.mntrRdsPi))>=7745`).
 - **RDS PS [MSK]**: Triggered if RDS PS value is not equal to 'ZHARA FM' (`avg(last(/DEVA DB4005/DB4005.mntrRdsPs))<>'ZHARA FM'`).
 - **Temperature [MSK]**: Triggered if motherboard temperature exceeds 45°C (`last(/DEVA DB4005/DB4005.TempValue,#2)>45`).
+- **SD Card [Broken]**: Triggered if SD card is detected as broken.
 
 ## Usage
 - This template is designed for broadcast engineers and technicians who need to monitor the **Deva Broadcast DB4005** for quality assurance and system uptime.
@@ -63,7 +68,3 @@ If you encounter issues or have suggestions for improvement, feel free to open a
 ## Acknowledgements
 - **Deva Broadcast** for the DB4005 FM monitoring receiver.
 - **Zabbix Community** for providing excellent monitoring capabilities.
-
-=======
-# zabbix-template-db4005
-Zabbix Template for monitoring the Deva Broadcast DB4005 FM receiver. This template enables real-time monitoring of key metrics, including RF level, audio quality, RDS parameters, and temperature. It is ideal for broadcast engineers who need reliable oversight of their broadcast system. Compatible with Zabbix 6.0+
