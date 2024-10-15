@@ -64,3 +64,6 @@ If you encounter issues or have suggestions for improvement, feel free to open a
 - **Deva Broadcast** for the DB4005 FM monitoring receiver.
 - **Zabbix Community** for providing excellent monitoring capabilities.
 
+=======
+# zabbix-template-db4005
+Zabbix Template for monitoring the Deva Broadcast DB4005 FM receiver. This template enables real-time monitoring of key metrics, including RF level, audio quality, RDS parameters, and temperature. It is ideal for broadcast engineers who need reliable oversight of their broadcast system. Compatible with Zabbix 6.0+
