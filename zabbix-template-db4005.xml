@@ -1,0 +1,637 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>6.0</version>
+    <date>2024-10-15T08:59:52Z</date>
+    <groups>
+        <group>
+            <uuid>42fbef5fae0f4b86afd9621e7c9bba31</uuid>
+            <name>ZHARAFM</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <uuid>a97f8906cd9c4a35a4d7f385ecacb043</uuid>
+            <template>DEVA DB4005</template>
+            <name>DEVA DB4005</name>
+            <description>## Description
+
+Zabbix Template for monitoring the Deva Broadcast DB4005 FM receiver. This template enables real-time monitoring of key metrics, including RF level, audio quality, RDS parameters, and temperature. It is ideal for broadcast engineers who need reliable oversight of their broadcast system. Compatible with Zabbix 6.0+</description>
+            <groups>
+                <group>
+                    <name>ZHARAFM</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <uuid>ccb3d824886245d8a8717a492ba6d3ee</uuid>
+                    <name>[Status] Alarm Temp</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.4.1.35833.36.4.12.0</snmp_oid>
+                    <key>DB4005.Alarm.Status</key>
+                    <history>30d</history>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <description>Alarm Temp Status</description>
+                    <preprocessing>
+                        <step>
+                            <type>STR_REPLACE</type>
+                            <parameters>
+                                <parameter>1</parameter>
+                                <parameter>OK</parameter>
+                            </parameters>
+                        </step>
+                        <step>
+                            <type>STR_REPLACE</type>
+                            <parameters>
+                                <parameter>2</parameter>
+                                <parameter>FAIL</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>FM MONITORING</tag>
+                            <value>RF Signal</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>1cf6e4867604482187935093712a195c</uuid>
+                    <name>[Device] Serial Number</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.4.1.35833.36.1.2.0</snmp_oid>
+                    <key>DB4005.device.serNum</key>
+                    <delay>5h</delay>
+                    <history>10d</history>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>device.serNum</description>
+                    <inventory_link>SERIALNO_A</inventory_link>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>Hardware Status</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>0b78a6b9ccb842ae9a03b6d397a1773f</uuid>
+                    <name>[Device] FanSpeed</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.4.1.35833.36.3.6.0</snmp_oid>
+                    <key>DB4005.FanValue</key>
+                    <delay>5m</delay>
+                    <history>30d</history>
+                    <trends>0</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>rpm</units>
+                    <description>Fan Speed on Motherboard</description>
+                </item>
+                <item>
+                    <uuid>9e54930573e949e1b0fde6b4b9c466a8</uuid>
+                    <name>[Audio] Left Channel</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.4.1.35833.36.3.1.26.0</snmp_oid>
+                    <key>DB4005.Left.Audio.Signal</key>
+                    <delay>30s</delay>
+                    <history>30d</history>
+                    <trends>90d</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>dBFs</units>
+                    <description>Audio signal from Left channel</description>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>0.00396</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>FM MONITORING</tag>
+                            <value>Audio Signal</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>b415afd9d8dd425c8885a7b2994bf418</uuid>
+                    <name>[Audio] Loudness</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.4.1.35833.36.3.1.51.0</snmp_oid>
+                    <key>DB4005.Loudness.Momentary</key>
+                    <delay>30s</delay>
+                    <trends>0</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>LUFS</units>
+                    <description>Loudness Momentary Value</description>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>0.00396</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <triggers>
+                        <trigger>
+                            <uuid>65715753e6a74044bd813d385507e626</uuid>
+                            <expression>last(/DEVA DB4005/DB4005.Loudness.Momentary,#2)&lt;=-12</expression>
+                            <name>Loudness (LUFS) MSK</name>
+                            <priority>HIGH</priority>
+                            <tags>
+                                <tag>
+                                    <tag>FM Monitoring</tag>
+                                    <value>LUFS</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>d5401d42b40e4dcc9e89a359f99bf280</uuid>
+                    <name>[Tuner] Frequency</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.4.1.35833.36.3.1.1.0</snmp_oid>
+                    <key>DB4005.mntrFreq</key>
+                    <history>10d</history>
+                    <trends>30d</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>MHz</units>
+                    <description>Radio's frequency</description>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>0.001</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>FM Monitoring</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>4c5a782096e346b2a5f0d4356ec1adc7</uuid>
+                            <expression>last(/DEVA DB4005/DB4005.mntrFreq,#1)&lt;&gt;100.5</expression>
+                            <name>Frequency [MSK]</name>
+                            <priority>HIGH</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>0bd44ebba5ae4c8eb214271f3b65e24c</uuid>
+                    <name>[RDS] PI</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.4.1.35833.36.3.1.40.0</snmp_oid>
+                    <key>DB4005.mntrRdsPi</key>
+                    <delay>90s</delay>
+                    <history>10d</history>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>Radio Data System: Programme Identification</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>RDS Monitoring</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>62e103a33b5c406daf4c21eabd1b578c</uuid>
+                            <expression>avg(last(/DEVA DB4005/DB4005.mntrRdsPi))&lt;&gt;7745</expression>
+                            <name>RDS PI [MSK]</name>
+                            <priority>HIGH</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                        <trigger>
+                            <uuid>88979da030dc4191b5ca8dd7cfc8b893</uuid>
+                            <expression>avg(last(/DEVA DB4005/DB4005.mntrRdsPi))&lt;&gt;&quot;ZHARA FM&quot;</expression>
+                            <name>RDS PS [MSK]</name>
+                            <priority>HIGH</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>86cc587ce4f7416293fa78d6ca5c9e5e</uuid>
+                    <name>[RDS] PS</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.4.1.35833.36.3.1.41.0</snmp_oid>
+                    <key>DB4005.mntrRdsPs</key>
+                    <delay>30s</delay>
+                    <history>30d</history>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>Radio Data System: Program Service Name</description>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>RDS Monitoring</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>3f3ecb15548c4be9ba25722878f88d4f</uuid>
+                    <name>[RDS] RT</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.4.1.35833.36.3.1.42.0</snmp_oid>
+                    <key>DB4005.mntrRdsPt</key>
+                    <delay>30s</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>RDS Monitoring</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>447bd04e21274eaebc8ab4df99349be1</uuid>
+                    <name>[RDS] PTY</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.4.1.35833.36.3.1.46.0</snmp_oid>
+                    <key>DB4005.mntrRdsPty</key>
+                    <history>10d</history>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>Radio System Data: Programme TYpe</description>
+                    <preprocessing>
+                        <step>
+                            <type>STR_REPLACE</type>
+                            <parameters>
+                                <parameter>10</parameter>
+                                <parameter>Pop Music</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>RDS Monitoring</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>1eb5d9d3232d41aeb5bc5aa517c1515e</uuid>
+                    <name>[Tuner] MutliPath</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.4.1.35833.36.3.1.5.0</snmp_oid>
+                    <key>DB4005.Mpath.ValueAvr</key>
+                    <delay>30s</delay>
+                    <history>30d</history>
+                    <trends>180d</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>%</units>
+                    <description>MultiPath</description>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>0.00396</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>FM Monitoring</tag>
+                            <value>MultiPath</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>053522f57995496cab627ec2d64f686f</uuid>
+                            <expression>avg(min(/DEVA DB4005/DB4005.Mpath.ValueAvr,2m))&gt;=15</expression>
+                            <name>MULTIPATH [MSK]</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>0150260e45054699940610916e6f2557</uuid>
+                    <name>[Status] Alarm MPX</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.4.1.35833.36.4.2.0</snmp_oid>
+                    <key>DB4005.MPX.Status</key>
+                    <delay>30s</delay>
+                    <history>30d</history>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <description>Alarm MPX Status</description>
+                    <preprocessing>
+                        <step>
+                            <type>STR_REPLACE</type>
+                            <parameters>
+                                <parameter>1</parameter>
+                                <parameter>OK</parameter>
+                            </parameters>
+                        </step>
+                        <step>
+                            <type>STR_REPLACE</type>
+                            <parameters>
+                                <parameter>2</parameter>
+                                <parameter>FAIL</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>FM MONITORING</tag>
+                            <value>RF Signal</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>314429d50fe344c79ca510145c3fb3a1</uuid>
+                    <name>[MPX] Deviation</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.4.1.35833.36.3.1.9.0</snmp_oid>
+                    <key>DB4005.MPXDeviation</key>
+                    <trends>0</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>kHz</units>
+                    <description>MPX Total</description>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>0.00396</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>FM Monitoring</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>b775818240c4416694b651e9c1e767da</uuid>
+                    <name>[Audio] MPX Power</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.4.1.35833.36.3.1.19.0</snmp_oid>
+                    <key>DB4005.MPXPWR</key>
+                    <trends>0</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>dBr</units>
+                    <description>MPX Power</description>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>0.00396</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>Application</tag>
+                            <value>FM Monitoring</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>9a6d61d603a24290bdc1b166e08e86f6</uuid>
+                    <name>[Tuner] Pilot</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.4.1.35833.36.3.1.20.0</snmp_oid>
+                    <key>DB4005.PilotValue</key>
+                    <history>30d</history>
+                    <trends>90d</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>kHz</units>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>0.004</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>FM MONITORING</tag>
+                            <value>RF Signal</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>04017ec94a78482fa097de5ddbe58869</uuid>
+                    <name>[Tuner] RDS-Level</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.4.1.35833.36.3.1.23.0</snmp_oid>
+                    <key>DB4005.RDS.Signal</key>
+                    <delay>3m</delay>
+                    <history>30d</history>
+                    <trends>90d</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>kHz</units>
+                    <description>RDS Level
+Standard is 2.4kHz</description>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>0.004</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>FM MONITORING</tag>
+                            <value>RF Signal</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>98526ed9864741729d8cb4633cbb2312</uuid>
+                    <name>[Status] Alarm RF</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.4.1.35833.36.4.1.0</snmp_oid>
+                    <key>DB4005.RF.Status</key>
+                    <delay>30s</delay>
+                    <history>30d</history>
+                    <trends>0</trends>
+                    <value_type>CHAR</value_type>
+                    <description>Alarm RF Status</description>
+                    <preprocessing>
+                        <step>
+                            <type>STR_REPLACE</type>
+                            <parameters>
+                                <parameter>1</parameter>
+                                <parameter>OK</parameter>
+                            </parameters>
+                        </step>
+                        <step>
+                            <type>STR_REPLACE</type>
+                            <parameters>
+                                <parameter>2</parameter>
+                                <parameter>FAIL</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>FM MONITORING</tag>
+                            <value>RF Signal</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>244b7b7eb42a416ba49e30ae5e6314ee</uuid>
+                    <name>[Tuner] RF Signal</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.4.1.35833.31.3.2.0</snmp_oid>
+                    <key>DB4005.RFvlValue</key>
+                    <delay>15s</delay>
+                    <history>30d</history>
+                    <trends>90d</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>dBμV</units>
+                    <description>RF Signal</description>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>0.004</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>FM MONITORING</tag>
+                            <value>RF Signal</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>b45f7331908a4ad0b9e2bfae7e6aed65</uuid>
+                    <name>[Audio] Right Channel</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.4.1.35833.36.3.1.29.0</snmp_oid>
+                    <key>DB4005.Right.Audio.Signal</key>
+                    <delay>30s</delay>
+                    <history>30d</history>
+                    <trends>90d</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>dBFs</units>
+                    <description>Radio's signal from Right channel</description>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>0.00396</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <tags>
+                        <tag>
+                            <tag>FM MONITORING</tag>
+                            <value>Audio Signal</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>f1ff7e82c2a7480994a3ca63f9ebae9f</uuid>
+                    <name>[Device] SD Card Free</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.4.1.35833.36.3.10.0</snmp_oid>
+                    <key>DB4005.SDCardFree</key>
+                    <history>30d</history>
+                    <trends>0</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>MB</units>
+                    <description>SD Card Free</description>
+                    <tags>
+                        <tag>
+                            <tag>FM Monitoring</tag>
+                            <value>SD Card</value>
+                        </tag>
+                    </tags>
+                </item>
+                <item>
+                    <uuid>2a35d9562ff942cea5be12270f11ce1a</uuid>
+                    <name>[Device] SD Card Used</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.4.1.35833.36.3.9.0</snmp_oid>
+                    <key>DB4005.SDCardUsed</key>
+                    <history>30d</history>
+                    <trends>0</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>MB</units>
+                    <description>SD Card Used</description>
+                    <tags>
+                        <tag>
+                            <tag>FM Monitoring</tag>
+                            <value>SD Card</value>
+                        </tag>
+                    </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>c2213d082fa743bbb7ffb16694b34ee7</uuid>
+                            <expression>(last(/DEVA DB4005/DB4005.SDCardUsed,#2)=0)=(last(/DEVA DB4005/DB4005.SDCardUsed,#2)=0)</expression>
+                            <name>[SD Card] Broken</name>
+                            <priority>DISASTER</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
+                    <uuid>cf425feefe534089806a39526fca2679</uuid>
+                    <name>[Device] Temperature</name>
+                    <type>SNMP_AGENT</type>
+                    <snmp_oid>.1.3.6.1.4.1.35833.36.3.3.0</snmp_oid>
+                    <key>DB4005.TempValue</key>
+                    <delay>5m</delay>
+                    <history>30d</history>
+                    <trends>0</trends>
+                    <value_type>FLOAT</value_type>
+                    <units>C</units>
+                    <description>Temp on Motherboard</description>
+                    <preprocessing>
+                        <step>
+                            <type>MULTIPLIER</type>
+                            <parameters>
+                                <parameter>0.00396</parameter>
+                            </parameters>
+                        </step>
+                    </preprocessing>
+                    <triggers>
+                        <trigger>
+                            <uuid>791fb8d52ba049f8886e057b382b84aa</uuid>
+                            <expression>last(/DEVA DB4005/DB4005.TempValue,#2)&gt;45</expression>
+                            <name>Temperature [MSK]</name>
+                            <priority>HIGH</priority>
+                            <tags>
+                                <tag>
+                                    <tag>FM MONITORING</tag>
+                                    <value>Device Temp</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+        </template>
+    </templates>
+    <triggers>
+        <trigger>
+            <uuid>37cec57a5dc44c6ebfe82fd8c6ddf58b</uuid>
+            <expression>avg(min(/DEVA DB4005/DB4005.Left.Audio.Signal,2m))&lt;=-40 or
+avg(min(/DEVA DB4005/DB4005.Right.Audio.Signal,2m))&lt;=-40</expression>
+            <name>LOST AUDIO. Average level &lt; -40dBFs</name>
+            <priority>HIGH</priority>
+            <tags>
+                <tag>
+                    <tag>FM MONITORING</tag>
+                    <value>Audio Signal</value>
+                </tag>
+            </tags>
+        </trigger>
+    </triggers>
+</zabbix_export>
