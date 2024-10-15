@@ -176,8 +176,8 @@ Zabbix Template for monitoring the Deva Broadcast DB4005 FM receiver. This templ
                     <triggers>
                         <trigger>
                             <uuid>4c5a782096e346b2a5f0d4356ec1adc7</uuid>
-                            <expression>last(/DEVA DB4005/DB4005.mntrFreq,#1)&lt;&gt;100.5</expression>
-                            <name>Frequency [MSK]</name>
+                            <expression>last(/DEVA DB4005/DB4005.mntrFreq,#1)&lt;&gt;100.0</expression>
+                            <name>Frequency</name>
                             <priority>HIGH</priority>
                             <manual_close>YES</manual_close>
                         </trigger>
@@ -204,14 +204,14 @@ Zabbix Template for monitoring the Deva Broadcast DB4005 FM receiver. This templ
                         <trigger>
                             <uuid>62e103a33b5c406daf4c21eabd1b578c</uuid>
                             <expression>avg(last(/DEVA DB4005/DB4005.mntrRdsPi))&lt;&gt;7745</expression>
-                            <name>RDS PI [MSK]</name>
+                            <name>RDS PI</name>
                             <priority>HIGH</priority>
                             <manual_close>YES</manual_close>
                         </trigger>
                         <trigger>
                             <uuid>88979da030dc4191b5ca8dd7cfc8b893</uuid>
                             <expression>avg(last(/DEVA DB4005/DB4005.mntrRdsPi))&lt;&gt;&quot;FM RADIO&quot;</expression>
-                            <name>RDS PS [MSK]</name>
+                            <name>RDS PS</name>
                             <priority>HIGH</priority>
                             <manual_close>YES</manual_close>
                         </trigger>
@@ -307,7 +307,7 @@ Zabbix Template for monitoring the Deva Broadcast DB4005 FM receiver. This templ
                         <trigger>
                             <uuid>053522f57995496cab627ec2d64f686f</uuid>
                             <expression>avg(min(/DEVA DB4005/DB4005.Mpath.ValueAvr,2m))&gt;=15</expression>
-                            <name>MULTIPATH [MSK]</name>
+                            <name>MULTIPATH</name>
                             <priority>HIGH</priority>
                         </trigger>
                     </triggers>
@@ -605,7 +605,7 @@ Standard is 2.4kHz</description>
                         <trigger>
                             <uuid>791fb8d52ba049f8886e057b382b84aa</uuid>
                             <expression>last(/DEVA DB4005/DB4005.TempValue,#2)&gt;45</expression>
-                            <name>Temperature [MSK]</name>
+                            <name>Temperature</name>
                             <priority>HIGH</priority>
                             <tags>
                                 <tag>

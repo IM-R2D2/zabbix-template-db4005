@@ -12,7 +12,7 @@ This repository contains a Zabbix template for monitoring the **Deva Broadcast D
 - **SD Card Monitoring**: Monitors SD card usage and status.
 
 ## Requirements
-- **Firmware Version**: Compatible with Deva Broadcast DB4005 firmware version 2.6.2203 and above.
+- **Firmware Version**: Compatible with Deva Broadcast DB4005 firmware version 2.6.2203 (!) and above.
 - **Zabbix Server Version**: Tested with Zabbix 6.0 and above.
 - **Deva Broadcast DB4005**: The device should have SNMP enabled, and it must be accessible from the Zabbix server.
 - **SNMP Configuration**: Ensure that the DB4005 has SNMP community strings configured, and the Zabbix server has the necessary permissions to query it.
@@ -46,13 +46,13 @@ The template includes the following metrics:
 - **Device Status**: Includes fan speed (`[Device] FanSpeed`) and other alarms (e.g., `[Status] Alarm MPX`, `[Status] Alarm RF`, `[Status] Alarm Temp`).
 
 ### Triggers
-- **Frequency [MSK]**: Triggered if the frequency is outside the desired range (`last(/DEVA DB4005/DB4005.mntrFreq,#1)>=100.5`).
-- **LOST AUDIO. Average level < -40dB FS**: Triggered if average audio level falls below -40dB (`avg(min(/DEVA DB4005/DB4005.Left.Audio.Signal,2m))<=-40 or avg(min(/DEVA DB4005/DB4005.Right.Audio.Signal,2m))<=-40`).
-- **Loudness (LUFS) [MSK]**: Triggered if loudness level is less than or equal to -12 LUFS (`last(/DEVA DB4005/DB4005.Loudness.Momentary,#2)<=-12`).
-- **MULTIPATH [MSK]**: Triggered if multipath value is greater than or equal to 15 (`avg(min(/DEVA DB4005/DB4005.Mpath.ValueAvr,2m))>=15`).
-- **RDS PI [MSK]**: Triggered if RDS PI value is outside the desired range (`avg(last(/DEVA DB4005/DB4005.mntrRdsPi))>=7745`).
-- **RDS PS [MSK]**: Triggered if RDS PS value is not equal to 'ZHARA FM' (`avg(last(/DEVA DB4005/DB4005.mntrRdsPs))<>'ZHARA FM'`).
-- **Temperature [MSK]**: Triggered if motherboard temperature exceeds 45°C (`last(/DEVA DB4005/DB4005.TempValue,#2)>45`).
+- **Frequency**: Triggered if the frequency is outside the desired range.
+- **LOST AUDIO. Average level < -40dB FS**: Triggered if average audio level falls below -40dB.
+- **Loudness (LUFS)**: Triggered if loudness level is less than or equal to -12 LUFS.
+- **MULTIPATH**: Triggered if multipath value.
+- **RDS PI**: Triggered if RDS PI value is outside the desired range.
+- **RDS PS**: Triggered if RDS PS value.
+- **Temperature**: Triggered if motherboard temperature.
 - **SD Card [Broken]**: Triggered if SD card is detected as broken.
 
 ## Usage
