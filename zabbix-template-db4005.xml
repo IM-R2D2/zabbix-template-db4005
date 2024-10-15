@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>6.0</version>
-    <date>2024-10-15T08:59:52Z</date>
+    <date>2024-10-15T16:31:27Z</date>
     <groups>
         <group>
             <uuid>42fbef5fae0f4b86afd9621e7c9bba31</uuid>
-            <name>TEMPLATE</name>
+            <name>RADIO FM</name>
         </group>
     </groups>
     <templates>
@@ -15,10 +15,14 @@
             <name>DEVA DB4005</name>
             <description>## Description
 
-Zabbix Template for monitoring the Deva Broadcast DB4005 FM receiver. This template enables real-time monitoring of key metrics, including RF level, audio quality, RDS parameters, and temperature. It is ideal for broadcast engineers who need reliable oversight of their broadcast system. Compatible with Zabbix 6.0+</description>
+Zabbix Template for monitoring the Deva Broadcast DB4005 FM receiver. 
+
+This template enables real-time monitoring of key metrics, including RF level, audio quality, RDS parameters, and temperature. 
+It's ideal for broadcast engineers who need reliable oversight of their broadcast system. 
+Compatible with Zabbix 6.0+</description>
             <groups>
                 <group>
-                    <name>TEMPLATE</name>
+                    <name>TEMPLATE'S GROUP</name>
                 </group>
             </groups>
             <items>
@@ -101,9 +105,9 @@ Zabbix Template for monitoring the Deva Broadcast DB4005 FM receiver. This templ
                     <description>Audio signal from Left channel</description>
                     <preprocessing>
                         <step>
-                            <type>MULTIPLIER</type>
+                            <type>JAVASCRIPT</type>
                             <parameters>
-                                <parameter>0.00396</parameter>
+                                <parameter>return Math.round((value / 256) * 100) / 100;</parameter>
                             </parameters>
                         </step>
                     </preprocessing>
@@ -127,9 +131,9 @@ Zabbix Template for monitoring the Deva Broadcast DB4005 FM receiver. This templ
                     <description>Loudness Momentary Value</description>
                     <preprocessing>
                         <step>
-                            <type>MULTIPLIER</type>
+                            <type>JAVASCRIPT</type>
                             <parameters>
-                                <parameter>0.00396</parameter>
+                                <parameter>return Math.round((value / 256) * 100) / 100;</parameter>
                             </parameters>
                         </step>
                     </preprocessing>
@@ -176,7 +180,7 @@ Zabbix Template for monitoring the Deva Broadcast DB4005 FM receiver. This templ
                     <triggers>
                         <trigger>
                             <uuid>4c5a782096e346b2a5f0d4356ec1adc7</uuid>
-                            <expression>last(/DEVA DB4005/DB4005.mntrFreq,#1)&lt;&gt;100.0</expression>
+                            <expression>last(/DEVA DB4005/DB4005.mntrFreq,#1)&lt;&gt;100.5</expression>
                             <name>Frequency</name>
                             <priority>HIGH</priority>
                             <manual_close>YES</manual_close>
@@ -203,14 +207,14 @@ Zabbix Template for monitoring the Deva Broadcast DB4005 FM receiver. This templ
                     <triggers>
                         <trigger>
                             <uuid>62e103a33b5c406daf4c21eabd1b578c</uuid>
-                            <expression>avg(last(/DEVA DB4005/DB4005.mntrRdsPi))&lt;&gt;7745</expression>
+                            <expression>avg(last(/DEVA DB4005/DB4005.mntrRdsPi))&lt;&gt;0000</expression>
                             <name>RDS PI</name>
                             <priority>HIGH</priority>
                             <manual_close>YES</manual_close>
                         </trigger>
                         <trigger>
                             <uuid>88979da030dc4191b5ca8dd7cfc8b893</uuid>
-                            <expression>avg(last(/DEVA DB4005/DB4005.mntrRdsPi))&lt;&gt;&quot;FM RADIO&quot;</expression>
+                            <expression>avg(last(/DEVA DB4005/DB4005.mntrRdsPi))&lt;&gt;&quot;RADIO FM&quot;</expression>
                             <name>RDS PS</name>
                             <priority>HIGH</priority>
                             <manual_close>YES</manual_close>
@@ -291,9 +295,9 @@ Zabbix Template for monitoring the Deva Broadcast DB4005 FM receiver. This templ
                     <description>MultiPath</description>
                     <preprocessing>
                         <step>
-                            <type>MULTIPLIER</type>
+                            <type>JAVASCRIPT</type>
                             <parameters>
-                                <parameter>0.00396</parameter>
+                                <parameter>return Math.round((value / 256) * 100) / 100;</parameter>
                             </parameters>
                         </step>
                     </preprocessing>
@@ -358,9 +362,9 @@ Zabbix Template for monitoring the Deva Broadcast DB4005 FM receiver. This templ
                     <description>MPX Total</description>
                     <preprocessing>
                         <step>
-                            <type>MULTIPLIER</type>
+                            <type>JAVASCRIPT</type>
                             <parameters>
-                                <parameter>0.00396</parameter>
+                                <parameter>return Math.round((value / 256) * 100) / 100;</parameter>
                             </parameters>
                         </step>
                     </preprocessing>
@@ -383,9 +387,9 @@ Zabbix Template for monitoring the Deva Broadcast DB4005 FM receiver. This templ
                     <description>MPX Power</description>
                     <preprocessing>
                         <step>
-                            <type>MULTIPLIER</type>
+                            <type>JAVASCRIPT</type>
                             <parameters>
-                                <parameter>0.00396</parameter>
+                                <parameter>return Math.round((value / 256) * 100) / 100;</parameter>
                             </parameters>
                         </step>
                     </preprocessing>
@@ -408,9 +412,9 @@ Zabbix Template for monitoring the Deva Broadcast DB4005 FM receiver. This templ
                     <units>kHz</units>
                     <preprocessing>
                         <step>
-                            <type>MULTIPLIER</type>
+                            <type>JAVASCRIPT</type>
                             <parameters>
-                                <parameter>0.004</parameter>
+                                <parameter>return Math.round((value / 256) * 100) / 100;</parameter>
                             </parameters>
                         </step>
                     </preprocessing>
@@ -487,7 +491,7 @@ Standard is 2.4kHz</description>
                     <uuid>244b7b7eb42a416ba49e30ae5e6314ee</uuid>
                     <name>[Tuner] RF Signal</name>
                     <type>SNMP_AGENT</type>
-                    <snmp_oid>.1.3.6.1.4.1.35833.31.3.2.0</snmp_oid>
+                    <snmp_oid>.1.3.6.1.4.1.35833.36.3.1.2.0</snmp_oid>
                     <key>DB4005.RFvlValue</key>
                     <delay>15s</delay>
                     <history>30d</history>
@@ -497,9 +501,9 @@ Standard is 2.4kHz</description>
                     <description>RF Signal</description>
                     <preprocessing>
                         <step>
-                            <type>MULTIPLIER</type>
+                            <type>JAVASCRIPT</type>
                             <parameters>
-                                <parameter>0.004</parameter>
+                                <parameter>return Math.round((value / 256) * 100) / 100;</parameter>
                             </parameters>
                         </step>
                     </preprocessing>
@@ -524,9 +528,9 @@ Standard is 2.4kHz</description>
                     <description>Radio's signal from Right channel</description>
                     <preprocessing>
                         <step>
-                            <type>MULTIPLIER</type>
+                            <type>JAVASCRIPT</type>
                             <parameters>
-                                <parameter>0.00396</parameter>
+                                <parameter>return Math.round((value / 256) * 100) / 100;</parameter>
                             </parameters>
                         </step>
                     </preprocessing>
@@ -595,9 +599,9 @@ Standard is 2.4kHz</description>
                     <description>Temp on Motherboard</description>
                     <preprocessing>
                         <step>
-                            <type>MULTIPLIER</type>
+                            <type>JAVASCRIPT</type>
                             <parameters>
-                                <parameter>0.00396</parameter>
+                                <parameter>return Math.round((value / 256) * 100) / 100;</parameter>
                             </parameters>
                         </step>
                     </preprocessing>
