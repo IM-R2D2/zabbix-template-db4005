@@ -1,0 +1,340 @@
+zabbix_export:
+  version: '6.0'
+  date: '2024-10-15T06:08:21Z'
+  groups:
+    -
+      uuid: 42fbef5fae0f4b86afd9621e7c9bba31
+      name: TEMPLATE
+  templates:
+    -
+      uuid: a97f8906cd9c4a35a4d7f385ecacb043
+      template: 'DEVA DB4005'
+      name: 'DEVA DB4005'
+      description: |
+        ## Description
+        
+        Zabbix Template for monitoring the Deva Broadcast DB4005 FM receiver. This template enables real-time monitoring of key metrics, including RF level, audio quality, RDS parameters, and temperature. It is ideal for broadcast engineers who need reliable oversight of their broadcast system. Compatible with Zabbix 6.0+
+      groups:
+        -
+          name: ZHARAFM
+      items:
+        -
+          uuid: 1cf6e4867604482187935093712a195c
+          name: '[Device] Serial Number'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.35833.36.1.2.0
+          key: DB4005.device.serNum
+          delay: 5h
+          history: 10d
+          trends: '0'
+          value_type: TEXT
+          description: device.serNum
+          inventory_link: SERIALNO_A
+          tags:
+            -
+              tag: Application
+              value: 'Hardware Status'
+        -
+          uuid: 9e54930573e949e1b0fde6b4b9c466a8
+          name: '[LEFT] AudioSignal'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.35833.31.3.20.0
+          key: DB4005.Left.Audio.Signal
+          delay: 30s
+          history: 30d
+          trends: 90d
+          value_type: FLOAT
+          units: dBFs
+          preprocessing:
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.00396'
+          tags:
+            -
+              tag: 'FM MONITORING'
+              value: 'Audio Signal'
+        -
+          uuid: b415afd9d8dd425c8885a7b2994bf418
+          name: '[Loudness] Audio Signal'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.35833.31.3.49.0
+          key: DB4005.Loudness.Momentary
+          delay: 30s
+          trends: '0'
+          value_type: FLOAT
+          units: LUFS
+          preprocessing:
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.00396'
+          triggers:
+            -
+              uuid: 65715753e6a74044bd813d385507e626
+              expression: 'last(/DEVA DB4005/DB4005.Loudness.Momentary,#2)<=-12'
+              name: 'Loudness (LUFS) MSK'
+              priority: HIGH
+              tags:
+                -
+                  tag: 'FM Monitoring'
+                  value: LUFS
+        -
+          uuid: d5401d42b40e4dcc9e89a359f99bf280
+          name: '[Frequency] RF Tuner'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.35833.36.3.1.1.0
+          key: DB4005.mntrFreq
+          history: 10d
+          trends: 30d
+          value_type: FLOAT
+          units: MHz
+          preprocessing:
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.001'
+          tags:
+            -
+              tag: Application
+              value: 'FM Monitoring'
+          triggers:
+            -
+              uuid: 4c5a782096e346b2a5f0d4356ec1adc7
+              expression: 'last(/DEVA DB4005/DB4005.mntrFreq,#1)<>100.5'
+              name: 'Frequency [MSK]'
+              priority: HIGH
+              manual_close: 'YES'
+        -
+          uuid: 0bd44ebba5ae4c8eb214271f3b65e24c
+          name: '[RDS] PI'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.35833.36.3.1.40.0
+          key: DB4005.mntrRdsPi
+          delay: 90s
+          history: 10d
+          trends: '0'
+          value_type: TEXT
+          tags:
+            -
+              tag: Application
+              value: 'RDS Monitoring'
+          triggers:
+            -
+              uuid: 62e103a33b5c406daf4c21eabd1b578c
+              expression: 'avg(last(/DEVA DB4005/DB4005.mntrRdsPi))<>7745'
+              name: 'RDS PI [MSK]'
+              priority: HIGH
+              manual_close: 'YES'
+            -
+              uuid: 88979da030dc4191b5ca8dd7cfc8b893
+              expression: 'avg(last(/DEVA DB4005/DB4005.mntrRdsPi))<>"ZHARA FM"'
+              name: 'RDS PS [MSK]'
+              priority: HIGH
+              manual_close: 'YES'
+        -
+          uuid: 86cc587ce4f7416293fa78d6ca5c9e5e
+          name: '[RDS] PS'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.35833.36.3.1.41.0
+          key: DB4005.mntrRdsPs
+          delay: 30s
+          history: 30d
+          trends: '0'
+          value_type: TEXT
+          tags:
+            -
+              tag: Application
+              value: 'RDS Monitoring'
+        -
+          uuid: 3f3ecb15548c4be9ba25722878f88d4f
+          name: '[RDS] RT'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.35833.36.3.1.42.0
+          key: DB4005.mntrRdsPt
+          delay: 30s
+          trends: '0'
+          value_type: TEXT
+          tags:
+            -
+              tag: Application
+              value: 'RDS Monitoring'
+        -
+          uuid: 447bd04e21274eaebc8ab4df99349be1
+          name: '[RDS] PTY'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.35833.36.3.1.46.0
+          key: DB4005.mntrRdsPty
+          history: 10d
+          trends: '0'
+          value_type: TEXT
+          preprocessing:
+            -
+              type: STR_REPLACE
+              parameters:
+                - '10'
+                - 'Pop Music'
+          tags:
+            -
+              tag: Application
+              value: 'RDS Monitoring'
+        -
+          uuid: 1eb5d9d3232d41aeb5bc5aa517c1515e
+          name: '[MutliPath] RF Tuner'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.35833.31.3.5.0
+          key: DB4005.Mpath.ValueAvr
+          delay: 30s
+          history: 30d
+          trends: 180d
+          value_type: FLOAT
+          units: '%'
+          preprocessing:
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.00396'
+          tags:
+            -
+              tag: 'FM Monitoring'
+              value: MultiPath
+          triggers:
+            -
+              uuid: 053522f57995496cab627ec2d64f686f
+              expression: 'avg(min(/DEVA DB4005/DB4005.Mpath.ValueAvr,2m))>=15'
+              name: 'MULTIPATH [MSK]'
+              priority: HIGH
+        -
+          uuid: b775818240c4416694b651e9c1e767da
+          name: '[Audio] MPX Power'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.35833.31.3.11.0
+          key: DB4005.MPXPWR
+          trends: '0'
+          value_type: FLOAT
+          units: dBr
+          preprocessing:
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.00396'
+          tags:
+            -
+              tag: Application
+              value: 'FM Monitoring'
+        -
+          uuid: 9a6d61d603a24290bdc1b166e08e86f6
+          name: '[Pilot] RF Tuner'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.35833.31.3.14.0
+          key: DB4005.PilotValue
+          history: 30d
+          trends: 90d
+          value_type: FLOAT
+          units: kHz
+          preprocessing:
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.004'
+          tags:
+            -
+              tag: 'FM MONITORING'
+              value: 'RF Signal'
+        -
+          uuid: 04017ec94a78482fa097de5ddbe58869
+          name: '[RDS] RF Tuner'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.35833.31.3.17.0
+          key: DB4005.RDSValue
+          history: 30d
+          trends: 90d
+          value_type: FLOAT
+          units: kHz
+          preprocessing:
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.004'
+          tags:
+            -
+              tag: 'FM MONITORING'
+              value: 'RF Signal'
+        -
+          uuid: 244b7b7eb42a416ba49e30ae5e6314ee
+          name: '[Signal] RF Tuner'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.35833.31.3.2.0
+          key: DB4005.RFvlValue
+          delay: 15s
+          history: 30d
+          trends: 90d
+          value_type: FLOAT
+          units: dBμV
+          preprocessing:
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.004'
+          tags:
+            -
+              tag: 'FM MONITORING'
+              value: 'RF Signal'
+        -
+          uuid: b45f7331908a4ad0b9e2bfae7e6aed65
+          name: '[RIGHT] AudioSignal'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.35833.31.3.23.0
+          key: DB4005.Right.Audio.Signal
+          delay: 30s
+          history: 30d
+          trends: 90d
+          value_type: FLOAT
+          units: dBFs
+          preprocessing:
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.00396'
+          tags:
+            -
+              tag: 'FM MONITORING'
+              value: 'Audio Signal'
+        -
+          uuid: cf425feefe534089806a39526fca2679
+          name: '[Temp] MotherBoard'
+          type: SNMP_AGENT
+          snmp_oid: .1.3.6.1.4.1.35833.31.3.32.0
+          key: DB4005.TempValue
+          delay: 5m
+          history: 30d
+          trends: '0'
+          value_type: FLOAT
+          units: C
+          preprocessing:
+            -
+              type: MULTIPLIER
+              parameters:
+                - '0.00396'
+          triggers:
+            -
+              uuid: 791fb8d52ba049f8886e057b382b84aa
+              expression: 'last(/DEVA DB4005/DB4005.TempValue,#2)>45'
+              name: 'Temperature [MSK]'
+              priority: HIGH
+              tags:
+                -
+                  tag: 'FM MONITORING'
+                  value: 'Device Temp'
+  triggers:
+    -
+      uuid: 37cec57a5dc44c6ebfe82fd8c6ddf58b
+      expression: |
+        avg(min(/DEVA DB4005/DB4005.Left.Audio.Signal,2m))<=-40 or
+        avg(min(/DEVA DB4005/DB4005.Right.Audio.Signal,2m))<=-40
+      name: 'LOST AUDIO. Average level < -40dBFs'
+      priority: HIGH
+      tags:
+        -
+          tag: 'FM MONITORING'
+          value: 'Audio Signal'
