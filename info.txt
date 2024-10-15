@@ -1,0 +1,68 @@
+===============================================================================
+=                                                                             =
+=   SNMP MIB file usage                                                       =
+=                                                                             =
+=   This file contains detailed explanation of all custom data formats used   =
+=   in the MIB file.                                                          =
+=                                                                             =
+=   DEVA Broadcast Ltd.                                                       =
+=                                                                             =
+=   office@devabroadcast.com                                                  =
+=    www.devabroadcast.com                                                    =
+=                                                                             =
+===============================================================================
+
+
+    In order to maintain SNMP compatibility the MIB file uses two custom formats
+for representing real values:
+
+    Fr8p8 – with an interval of variation of the value [-128…128);
+    Fr1p15 – with an interval of variation of the value [-1… 1). 
+
+    Fr8p8 is fixed point 16-bit signed value. The higher 8 bits represent the
+integer part and the lower 8 bits represent the fractional part. To convert the
+Fr8p8 to decimal number the Fr8p8 value should be divided by 256:
+
+    Real value = Fr8p8 / 256
+
+    To convert the decimal number to Fr8p8 the decimal value should be multiplied
+by 256 (the result should be rounded):
+
+    Fr8p8 = Round( Real value * 256 )
+
+    The following table contains examples of Fr8p8 values and their corresponding
+real values:
+
+      Fr8p8    Real value
+     -32768     -128.0
+       -256       -1.0
+         -1       -0.00390625
+          0        0.0
+          1        0.00390625
+        256        1.0
+      32767      127.99609375
+
+
+    Fr1p15 is fixed point 16-bit signed value. The Lower 15 bits represent
+fractional part. To convert the Fr1p15 to decimal number the Fr1p15 value should
+be divided by 32768:
+
+    Real value = Fr1p15 / 32768
+
+    To convert the decimal number to Fr1p15 the decimal value should be multiplied
+by 32768 (the result should be rounded):
+
+    Fr1p15 = Round( Real value * 32768 )
+
+    The following table contains examples of Fr1p15 values and their corresponding
+real values:
+
+      Fr1p15    Real value
+     -32768      -1.0
+     -16384      -0.5
+         -1      -0.000030517578125
+          0       0.0
+          1       0.000030517578125
+      16384       0.5
+      32767       0.999969482421875
+
