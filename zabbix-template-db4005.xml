@@ -19,7 +19,8 @@ Zabbix Template for monitoring the Deva Broadcast DB4005 FM receiver.
 
 This template enables real-time monitoring of key metrics, including RF level, audio quality, RDS parameters, and temperature. 
 It's ideal for broadcast engineers who need reliable oversight of their broadcast system. 
-Compatible with Zabbix 6.0+</description>
+Compatible with Zabbix 6.0+
+            </description>
             <groups>
                 <group>
                     <name>TEMPLATE'S GROUP</name>
@@ -283,7 +284,7 @@ Compatible with Zabbix 6.0+</description>
                 </item>
                 <item>
                     <uuid>1eb5d9d3232d41aeb5bc5aa517c1515e</uuid>
-                    <name>[Tuner] MutliPath</name>
+                    <name>[Tuner] MultiPath</name>
                     <type>SNMP_AGENT</type>
                     <snmp_oid>.1.3.6.1.4.1.35833.36.3.1.5.0</snmp_oid>
                     <key>DB4005.Mpath.ValueAvr</key>
