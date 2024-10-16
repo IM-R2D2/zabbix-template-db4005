@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>6.0</version>
-    <date>2024-10-15T16:31:27Z</date>
+    <date>2024-10-16T12:00:00Z</date>
     <groups>
         <group>
             <uuid>42fbef5fae0f4b86afd9621e7c9bba31</uuid>
