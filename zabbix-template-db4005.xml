@@ -181,7 +181,7 @@ Compatible with Zabbix 6.0+
                     <triggers>
                         <trigger>
                             <uuid>4c5a782096e346b2a5f0d4356ec1adc7</uuid>
-                            <expression>last(/DEVA DB4005/DB4005.mntrFreq,#1)&lt;&gt;100.5</expression>
+                            <expression>last(/DEVA DB4005/DB4005.mntrFreq,#1)&lt;&gt;{$DB4005.EXPECTED.FREQUENCY}</expression>
                             <name>Frequency</name>
                             <priority>HIGH</priority>
                             <manual_close>YES</manual_close>
@@ -208,15 +208,8 @@ Compatible with Zabbix 6.0+
                     <triggers>
                         <trigger>
                             <uuid>62e103a33b5c406daf4c21eabd1b578c</uuid>
-                            <expression>avg(last(/DEVA DB4005/DB4005.mntrRdsPi))&lt;&gt;0000</expression>
+                            <expression>last(/DEVA DB4005/DB4005.mntrRdsPi)&lt;&gt;&quot;{$DB4005.EXPECTED.RDS.PI}&quot;</expression>
                             <name>RDS PI</name>
-                            <priority>HIGH</priority>
-                            <manual_close>YES</manual_close>
-                        </trigger>
-                        <trigger>
-                            <uuid>88979da030dc4191b5ca8dd7cfc8b893</uuid>
-                            <expression>avg(last(/DEVA DB4005/DB4005.mntrRdsPi))&lt;&gt;&quot;RADIO FM&quot;</expression>
-                            <name>RDS PS</name>
                             <priority>HIGH</priority>
                             <manual_close>YES</manual_close>
                         </trigger>
@@ -239,6 +232,15 @@ Compatible with Zabbix 6.0+
                             <value>RDS Monitoring</value>
                         </tag>
                     </tags>
+                    <triggers>
+                        <trigger>
+                            <uuid>88979da030dc4191b5ca8dd7cfc8b893</uuid>
+                            <expression>last(/DEVA DB4005/DB4005.mntrRdsPs)&lt;&gt;&quot;{$DB4005.EXPECTED.RDS.PS}&quot;</expression>
+                            <name>RDS PS</name>
+                            <priority>HIGH</priority>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
                 </item>
                 <item>
                     <uuid>3f3ecb15548c4be9ba25722878f88d4f</uuid>
@@ -577,14 +579,6 @@ Standard is 2.4kHz</description>
                             <value>SD Card</value>
                         </tag>
                     </tags>
-                    <triggers>
-                        <trigger>
-                            <uuid>c2213d082fa743bbb7ffb16694b34ee7</uuid>
-                            <expression>(last(/DEVA DB4005/DB4005.SDCardUsed,#2)=0)=(last(/DEVA DB4005/DB4005.SDCardUsed,#2)=0)</expression>
-                            <name>[SD Card] Broken</name>
-                            <priority>DISASTER</priority>
-                        </trigger>
-                    </triggers>
                 </item>
                 <item>
                     <uuid>cf425feefe534089806a39526fca2679</uuid>
@@ -622,6 +616,23 @@ Standard is 2.4kHz</description>
                     </triggers>
                 </item>
             </items>
+            <macros>
+                <macro>
+                    <macro>{$DB4005.EXPECTED.FREQUENCY}</macro>
+                    <value>100.5</value>
+                    <description>Expected monitored FM frequency in MHz.</description>
+                </macro>
+                <macro>
+                    <macro>{$DB4005.EXPECTED.RDS.PI}</macro>
+                    <value>0000</value>
+                    <description>Expected four-character RDS Programme Identification code.</description>
+                </macro>
+                <macro>
+                    <macro>{$DB4005.EXPECTED.RDS.PS}</macro>
+                    <value>RADIO FM</value>
+                    <description>Expected RDS Programme Service name.</description>
+                </macro>
+            </macros>
         </template>
     </templates>
     <triggers>
