@@ -32,6 +32,10 @@ This repository contains a Zabbix template for monitoring the **Deva Broadcast D
    - Ensure the host representing the DB4005 has an SNMP interface configured.
    - Verify the IP address, port (default is 161), and community string.
 
+4. **Set station values**:
+   - In the linked template, set `{$DB4005.EXPECTED.FREQUENCY}`, `{$DB4005.EXPECTED.RDS.PI}`, and `{$DB4005.EXPECTED.RDS.PS}` to the frequency and RDS identity of the monitored service.
+   - The bundled macro values retain the original example station values and must be changed before enabling the corresponding alerts.
+
 ## Template Details
 The template includes the following metrics:
 
@@ -46,14 +50,13 @@ The template includes the following metrics:
 - **Device Status**: Includes fan speed (`[Device] FanSpeed`) and other alarms (e.g., `[Status] Alarm MPX`, `[Status] Alarm RF`, `[Status] Alarm Temp`).
 
 ### Triggers
-- **Frequency**: Triggered if the frequency is outside the desired range.
+- **Frequency**: Triggered if the frequency differs from `{$DB4005.EXPECTED.FREQUENCY}`.
 - **LOST AUDIO. Average level < -40dB FS**: Triggered if average audio level falls below -40dB.
 - **Loudness (LUFS)**: Triggered if loudness level is less than or equal to -12 LUFS.
 - **MULTIPATH**: Triggered if multipath value.
-- **RDS PI**: Triggered if RDS PI value is outside the desired range.
-- **RDS PS**: Triggered if RDS PS value.
+- **RDS PI / PS**: Triggered if the received RDS identity differs from the configured station macros.
 - **Temperature**: Triggered if motherboard temperature.
-- **SD Card [Broken]**: Triggered if SD card is detected as broken.
+- **SD card capacity**: Free and used capacity are collected. The DB4005 MIB does not expose an SD-card health state, so the template deliberately does not fabricate a failure alarm from capacity counters.
 
 ## Usage
 - This template is designed for broadcast engineers and technicians who need to monitor the **Deva Broadcast DB4005** for quality assurance and system uptime.
